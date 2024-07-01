@@ -5,13 +5,13 @@ A conda environment .yaml file has been included which will allow the constructi
 
 ##### conda env create -f sitenet_env.yaml
 
-For this file to resolve properly the channel priority on conda must be set to strict. For convinience, create_sitenet_env.sh has been provided. This .sh file will store the current value of the channel priority, set the channel priority to strict, and then revert it back to whatever the previous setting was after the environment is installed. The default name of this environment is pytorch2201 but can be changed without consequence.
+For this file to resolve properly the channel priority on conda must be set to strict. For convinience, create_sitenet_env.sh has been provided. This .sh file will store the current value of the channel priority, set the channel priority to strict, and then revert it back to whatever the previous setting was after the environment is installed. The default name of this environment is pytorch2201 but can be changed without consequence. The sh is provided as is for convinience.
 
 ##### conda activate *Env Name*
 
 This local environment contains the same versions of all key packages used to generate the original results if built using create_sitenet_env.sh
 
-## Scripts for reproducing paper results
+## Steps for reproducing paper results
 
 Step 1. Generate data
 
