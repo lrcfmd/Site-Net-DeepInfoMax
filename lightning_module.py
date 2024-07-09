@@ -381,7 +381,7 @@ class SiteNet_DIM(pl.LightningModule):
     #Makes sure the model is in training mode, passes a batch through the model, then back propogates
     def training_step(self, batch_dictionary, batch_dictionary_idx):
         self.train()
-        local_opt,global_opt,task_opt,local_task_opt,local_prior_opt,global_prior_opt = self.optimizers()
+        local_opt,global_opt,task_opt,local_task_opt,local_prior_opt,global_prior_opt,composition_opt = self.optimizers()
         Attention_Mask = batch_dictionary["Attention_Mask"]
         Batch_Mask = batch_dictionary["Batch_Mask"]
         Site_Features = batch_dictionary["Site_Feature_Tensor"]*self.site_feature_scalers
@@ -467,9 +467,10 @@ class SiteNet_DIM(pl.LightningModule):
         Recon_Composition = self.Composition_Decoder(Global_Embedding_Features).clamp(0)
         Recon_Composition = Recon_Composition/(torch.sum(Recon_Composition,dim=1).unsqueeze(1).repeat(1,103)+10e-6)
         Composition_Loss = (-torch.sum(torch.min(Recon_Composition,batch_dictionary["Composition"]),1)).flatten().mean() + 1 #Half taxi cab distance for ternaries
-        Global_Loss = self.config["DIM_loss_global"]*Global_DIM_loss + self.config["Prior_loss_global"]*Global_prior_loss + self.config["KL_loss_global"]*Global_KL_loss + self.config["Composition_Loss"]*Composition_Loss
+        Global_Loss = self.config["DIM_loss_global"]*Global_DIM_loss + self.config["Prior_loss_global"]*Global_prior_loss + self.config["KL_loss_global"]*Global_KL_loss - self.config["Composition_Loss"]*Composition_Loss
         self.manual_backward(Global_Loss)
         global_opt.step()
+        composition_opt.step()
 
         #Train the prior discriminator
         global_prior_opt.zero_grad()
@@ -582,8 +583,13 @@ class SiteNet_DIM(pl.LightningModule):
             self.Global_Prior.parameters(),
             lr=self.config["Learning_Rate"],
             **Optimizer_Config["Kwargs"],)
+        #Composition decoder optimizer
+        composition_opt = optim_dict[Optimizer_Config["Name"]](
+            self.Composition_Decoder.parameters(),
+            lr=self.config["Learning_Rate"],
+            **Optimizer_Config["Kwargs"],)
 
-        return local_opt,global_opt,global_task_opt,local_task_opt,local_prior_opt,global_prior_opt
+        return local_opt,global_opt,global_task_opt,local_task_opt,local_prior_opt,global_prior_opt,composition_opt
 
     #Log the validation loss on every validation epoch
     def validation_epoch_end(self, outputs):
