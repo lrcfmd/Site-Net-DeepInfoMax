@@ -473,6 +473,9 @@ class SiteNet_DIM(pl.LightningModule):
 
         #Update the composition decoder
         composition_opt.zero_grad()
+        Recon_Composition = self.Composition_Decoder(Global_Embedding_Features.detach().clone()).clamp(0)
+        Recon_Composition = Recon_Composition/(torch.sum(Recon_Composition,dim=1).unsqueeze(1).repeat(1,103)+10e-6)
+        Composition_Loss = (-torch.sum(torch.min(Recon_Composition,batch_dictionary["Composition"]),1)).flatten().mean() + 1 #Half taxi cab distance for ternaries
         self.manual_backward(Composition_Loss)
         composition_opt.step()
 
