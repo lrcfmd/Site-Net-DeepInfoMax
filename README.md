@@ -40,7 +40,9 @@ python create_matbench_hdf5.py --cubic_supercell -s 50 -w [number of cpu cores d
 
 Step 2. Train Deep InfoMax models
 
-Deep InfoMax models can be trained with DIM_train.py. This script trains a Deep InfoMax site-net with the hyper parameters in a yaml config file. There are some additional losses that were not used in the final paper (prior matching loss) and some sanity check loss functions that try to fit the supervised proprety from the learned embedding. The sanity check losses are not in any way able to influence the weights of the main encoder and are an isolated module.
+Deep InfoMax models can be trained with DIM_train.py. This script trains a Deep InfoMax site-net with the hyper parameters in a yaml config file.
+
+There are some additional losses that were not used in the final paper (prior matching loss) and some sanity check loss functions that try to fit the supervised proprety from the learned embedding. The sanity check "task" losses try to use the encoded vector to predict the proprety in the datasets for the global case and the chemical element for the local case. These task losses only change the weights of the bespoke layers attached to the vector encoding, the encoder does not change according to this loss. They just exist so that the model becoming pathological can be picked up on if the task losses diverge.
 
 ### DIM_train.py arguments
 
