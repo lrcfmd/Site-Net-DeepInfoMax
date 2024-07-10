@@ -470,6 +470,10 @@ class SiteNet_DIM(pl.LightningModule):
         Global_Loss = self.config["DIM_loss_global"]*Global_DIM_loss + self.config["Prior_loss_global"]*Global_prior_loss + self.config["KL_loss_global"]*Global_KL_loss - self.config["Composition_Loss"]*Composition_Loss
         self.manual_backward(Global_Loss)
         global_opt.step()
+
+        #Update the composition decoder
+        composition_opt.zero_grad()
+        self.manual_backward(Composition_Loss)
         composition_opt.step()
 
         #Train the prior discriminator
