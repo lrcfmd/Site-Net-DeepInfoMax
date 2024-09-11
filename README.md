@@ -1,4 +1,4 @@
-Repository used for generating results for [Deep InfoMax paper title here]. The repository is provided as is for the purposes of providing the code used to generate the results in the paper and for reproduction of the results.
+Repository used for generating results for "Establishing Deep InfoMax as an effective self-supervised learning methodology in materials informatics". The repository is provided as is for the purposes of providing the code used to generate the results in the paper and for reproduction of the results.
 ## Environments
 
 A conda environment .yaml file has been included which will allow the construction of an anaconda environment. This conda environment can be created using
