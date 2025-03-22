@@ -121,7 +121,7 @@ def divide_chunks(l, n):
 def h5_dataset_from_structure_list(hdf5_file_name, structure_dictionary,cpus):
     f = h5py.File(hdf5_file_name, "w", libver="latest")
     keys_list = list(structure_dictionary.keys())
-    keys_chunked = list(divide_chunks(keys_list, 2048))
+    keys_chunked = list(divide_chunks(keys_list, 64))
     for keys in tqdm(keys_chunked):
         values = [structure_dictionary[key] for key in keys]
         pool = Pool(processes=cpus)
