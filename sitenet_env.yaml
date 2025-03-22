@@ -28,4 +28,5 @@ dependencies:
         - scienceplots==1.0.9
         - matbench==0.5
         - pymatgen==2022.0.17
+        - ruamel.yaml==0.17.21
 prefix: /users/sgmmora2/volatile/anaconda3/envs/pytorch_2201
