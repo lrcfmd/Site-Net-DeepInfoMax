@@ -5,6 +5,7 @@ lightning_logs/*/*
 *.csv
 *.png
 *.ckpt
+!eform_DIM_model.ckpt
 *.tar.gz
 *.local.yaml
 *.local

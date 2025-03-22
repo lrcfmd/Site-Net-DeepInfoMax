@@ -124,8 +124,9 @@ def clean_result(i, key_list, max_len):
         if i[key] is None:
             return "Invalid"
         else:
-            if np.isnan(i[key]).any():
-                return "Invalid"
+            if type(i[key]) is np.ndarray:
+                if np.isnan(i[key]).any():
+                    return "Invalid"
     if max_len is not None and valid == True:
         if i["Atomic_ID"].shape[0] > max_len:
             return "Invalid"
@@ -625,6 +626,7 @@ def result_get(
         result = list_to_dict(result, targets, "target")
         result = list_to_dict(result, prim_sizes, "prim_size")
         result = list_to_dict(result, images, "images")
+        result = list_to_dict(result, keys, "database_ID")
         h5_file.close()
         keys = [
             "Site_Feature_Tensor",
@@ -635,6 +637,7 @@ def result_get(
             "target",
             "prim_size",
             "images",
+            "database_ID"
         ]
         # print(site_result)
         result = [i for i in [clean_result(i, keys, max_len) for i in result]]
