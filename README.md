@@ -145,3 +145,29 @@ Run through the notebook Downstream_MAEs_to_plots.ipynb to get the box plots fro
 step 8. Generate the TSNEs from the paper
 
 Run through the notebook TSNE_production.ipynb 
+
+## Generating embeddings for your own data 
+
+You may generate your own data by first converting a zip file of cif files into a compatible dataset with cif_zip_to_hdf5.py (outlined below). 
+
+You can then run generate_embeddings.py -c [DIM model config yaml] -m [path to DIM model] -f [dataset to embed]. 
+
+To use the provided pretrained Deep InfoMax model in the repo trained on the materials project formation energy dataset please run generate_embeddings.py -c compact_dim_nocomp_klnorm.yaml -m eform_DIM_model.ckpt -f [dataset to embed]
+
+### Relevant files
+
+cif_zip_to_hdf5.py
+
+Produce a hdf5 file ready for use with train.py and predict.py using a zip of cif files and a csv defining supervised properties. Does not currently support disordered structures or multiple objectives. This script isn't used in the paper, rather, it exists as a way to run site-net on arbitrary datasets by mapping the properties and cif files to an hdf5 database. The zip file should only contain cif files and the csv should consist of a "file" column identifying the cif and "target" column specifying the value of the supervised property. An example setup with 2 cifs that have been assigned random target variables has been included in the repo.
+
+--primitive generates a dataset of primitive unit cells --cubic_supercell generates a dataset of supercells
+
+-s --supercell_size allows the size of the supercells to be specified
+
+-w --number_of_worker_processes allows the number of cpu threads used to be specified (default 1)
+
+-c --cif_zip Provide path to cif zip file, this should be a zip file containings only .cif files
+
+-d --data_csv Provide path to csv containing a column called "file" containing cif file names and a column called "target" containing the associated supervised value
+
+-hd --h5_path Provide path for the new hdf5 file
