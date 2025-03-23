@@ -158,7 +158,7 @@ To use the provided pretrained Deep InfoMax model in the repo trained on the mat
 
 cif_zip_to_hdf5.py
 
-Produce a hdf5 file ready for use with train.py and predict.py using a zip of cif files and a csv defining supervised properties. Does not currently support disordered structures or multiple objectives. This script isn't used in the paper, rather, it exists as a way to run site-net on arbitrary datasets by mapping the properties and cif files to an hdf5 database. The zip file should only contain cif files and the csv should consist of a "file" column identifying the cif and "target" column specifying the value of the supervised property. An example setup with 2 cifs that have been assigned random target variables has been included in the repo.
+Produce a hdf5 file of crystal embeddings and labels ready for use with the project from a zip of cif files and a csv defining supervised properties. Does not currently support disordered structures or multiple supervised labels. This script isn't used in the paper, rather, it exists as a way to run site-net on arbitrary datasets by mapping the properties and cif files to an hdf5 database. The zip file should only contain cif files and the csv should consist of a "file" column identifying the cif and "target" column specifying the value of the supervised property. An example setup with 2 cifs that have been assigned random target variables has been included in the repo.
 
 --primitive generates a dataset of primitive unit cells --cubic_supercell generates a dataset of supercells
 
@@ -171,3 +171,13 @@ Produce a hdf5 file ready for use with train.py and predict.py using a zip of ci
 -d --data_csv Provide path to csv containing a column called "file" containing cif file names and a column called "target" containing the associated supervised value
 
 -hd --h5_path Provide path for the new hdf5 file
+
+generate_embeddings.py
+
+Generates a csv file "DIM_embeddings.csv" using the provided hyper parameters configuration file, Deep InfoMax model weights, and dataset
+
+-c \--config allows the path of the configuration file to be specified (default None)
+
+-f \--h5_file_name allows the path of the h5 dataset used for training to be specified (default None) 
+
+-m \--model provides the file path to the model to be used to generate the embeddings with
